@@ -1,0 +1,123 @@
+---
+title: "STAT 385 Statistics Programming Methods - Spring 2021"
+author: Yeonchul Choi
+output: html_document
+---
+
+## Homework 02 
+### Due: Monday February 22, 2021 11:59 pm US Central Time
+#### Created by Course staff
+
+Grading Rubric (per question):  
+2 points if complete and correct  
+1 point if incomplete or incorrect  
+0 points if no attempt made  
+
+
+**Retrieving your work**
+
+This and all future homework .Rmd files are written in RMarkdown. The .Rmd file is rendered as an .html file for easier viewing. This and all future homework assignments are located in the **homework** directory within the **stat385-sp21-course-content** repo, i.e. **stat385-sp21-course-content/homework** in GitHub. It is always recommended that you **pull** (or refresh) the **stat385-sp21-course-content** repo to ensure that you have the most updated version of all course content including the homework assignments. After pulling (or refreshing) the **stat385-sp21-course-content** repo, the homework file will be in the homework directory. 
+
+**Submitting your work**
+
+In your individual student repo (named as your netID), you are to submit ***two*** files:
+
+a. Your reproducible document file (.Rmd) which should be saved as homework##-netID.Rmd. For example, my homework 01 file would be saved as homework01-kinson2.Rmd.
+
+b. Your rendered reproducible document file (.html) which should be saved as homework##-netID.html. For example, my homework 01 file would be saved as homework01-kinson2.html.
+
+You have an unlimited number of submissions, but only the latest proper submission (commit and push) will be viewed and graded. **Remember the .Rmd file needs to render properly to .html before submitting.** 
+
+
+***
+
+Students are expected to complete all problems.
+
+*The following problems should be completed by you as an individual. If any problem asks you a particular question, be sure to answer it completely (with code, written sentences, or both). Written sentences should not appear in code chunks or code cells. Written sentences should appear in Markdown syntax unless specifically stated otherwise.*
+
+***Do not change anything in this file above the double line.***
+
+***
+***
+
+### Use only R and RMarkdown for this entire homework assignment. Use the URLs to access the data (if any). No local files allowed. Functions or programming ideas beyond the topics/ideas covered thus far are not allowed. The `subset` function is never allowed in this course.
+
+**#1** (Markdown) Using Markdown syntax, make a numbered list with your first name in normal text as the first item and your last name in italic text as the second item.
+
+1. Yeonchul
+2. *Choi*
+
+**#2** (Personal survey, Markdown) Think about the previous two weeks (your experiences, assignments, life). Using Markdown, describe in paragraph form (with at least 3 complete sentences) what was the most challenging part(s) about homework 01, the most challenging part(s) about your weeks 01-02, and the thing(s) that made your week successful or unsuccessful.
+
+-In homework 01, it was really challenge for me to show 01 not 1 in question 7. I figured out new method you represent numbers. And I've never used github before so the first time it was really hard to be familiar with the git program in R studio.
+
+**#3** (GitHub, Markdown) **Pull requests** are the erroneous result of files being changed in the local remote repo without first pulling the repo in GitHub. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+-FALSE
+**According to note 2, pull requests are suggestions that collaborators make when they are working on a project with an entity, where that entity has the power to approve and incorporate the changes made in the pull request or to deny the pull request for various reasons.**
+
+**#4** (Introduction to R Chapter 5, Introduction to R Chapter 8) Create a matrix (named as `matrix01`) with three columns such that column 1 contains the first 10 letters of the alphabet in repeating sequence (i.e. a, a, b, b, ..., j, j) letters, column 2 contains 20 random continuous normal distribution deviates (where N(0,3)) rounded to the tenths place, and column 3 contains a randomized ordering of the concatenated values of columns 1 and 2. *The concatenation should not have any spaces between the values of columns 1 and 2.* Print the resulting `matrix01`. *There should be only 20 rows in `matrix01`.* 
+
+```{r}
+x =rep(c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),2)
+y = rnorm(20, mean = 0, sd =3)
+y_new = round(y,1)
+z= paste(x,y,sep='')
+
+matrix01 = cbind(x,y_new,z)
+colnames(matrix01) = c("col1", "col2", "col3")
+matrix01
+```
+
+**#5** (Introduction to R Chapter 3, Introduction to R Chapter 5) Let `matrix02` be equal to the `matrix01` that was in **Problem 4**. Now, create a new `matrix02` that has its entire rows reordered such that the column 2 numeric values are in decreasing order. *Column 2 is determining the row order for the entire matrix; not just switching the order of column 2 alone.* Print the resulting `matrix02`. *There should be only 20 rows in `matrix02`.*
+
+```{r}
+matrix02= matrix01
+matrix02[,2] = sort(matrix02[,2],decreasing=TRUE)
+matrix02
+```
+
+**#6** (Introduction to R Chapter 5, Introduction to R Chapter 8) Place two integer vectors (named as `x01` and `x02`) into a single matrix named as `matrix03` such that both `x01` and`x02` have 20 elements each. `x01` contains a random sample (not from any statistical distribution) of 20 values between the numbers 1 and 30 such that no values appear more than once. `x02` contains a random sample (not from any statistical distribution) of 20 values between the numbers 1 and 15 such that some values appear more than once. Print the resulting `matrix03`. *There should be only 20 rows in `matrix03`.*
+
+```{r}
+x01=sample(1:30, 20)
+x02=sample(1:15, 20, replace = TRUE)
+matrix03 = cbind(x01, x02)
+matrix03
+```
+  
+
+
+**#7** (Introduction to R Chapter 3) Create two new vectors `x03` and `x04` such that `x03` coerces the integer vector `x01` (in **Problem 6**) to be a logical vector such that any number greater than 11 should have a logical value of TRUE, while `x04` is a sequence of 20 elements beginning with 0 and ending with 1. 
+
+```{r}
+x03 = (x01 > 11)
+x04 = seq(0,1, length.out=20)
+```
+
+**#8** (Introduction to R Chapter 3, Introduction to R Chapter 5) Place the vectors `x03` and `x04` into a 20 rows by 2 columns array named as `array01` with the `array()` function. Name the columns of the array as "x03" and "x04". Print the `array01` and its mode.
+
+```{r}
+array01 = array(c(x03,x04),c(20,2))
+colnames(array01) = c("x03","x04")
+array01
+mode(array01)
+```
+
+**#9** (Introduction to R Chapter 3, Introduction to R Chapter 5) Why did the values of the column "x03" become 0s and 1s?   
+
+-It should be same data type in array. So x03 become 0s and 1s because x04 contains all the numeric values.
+
+
+**#10** (Introduction to R Chapter 5, Introduction to R Chapter 8) Create the entire deck of standard playing cards (52 cards total) with a matrix such that the first column stores the "Suit" about the suit of the card, second column stores the "Color" about the suit's color, and the third column stores the "Worth" about the numeric or feature value of the card. Then, print the first 10 rows of the matrix such that the cards appear in randomized order. *Numeric or feature values include numbers, face cards and Aces.* Read the [Composition section on Wikipedia](https://en.wikipedia.org/wiki/Standard_52-card_deck) for more details about the standard 52-card deck.
+
+```{r}
+suit = c(rep("spade",13),rep("diamond",13),rep("heart",13),rep("club",13))
+
+color = c(rep("black",13),rep("red",13),rep("red",13),rep("black",13))
+
+worth = rep(c("A",2:10,"J","Q","K"),4)
+
+cards=matrix(c(suit,color,worth),ncol=3)
+cards[sample(1:52, 10), ]
+```

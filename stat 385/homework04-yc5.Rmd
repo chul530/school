@@ -1,0 +1,284 @@
+---
+title: "STAT 385 Statistics Programming Methods - Spring 2021"
+output: html_document
+---
+
+## Homework 04
+### Due: Monday March 29, 2021 11:59 pm US Central Time
+#### Created by Course staff
+
+Grading Rubric (per question):  
+2 points if complete and correct  
+1 point if incomplete or incorrect  
+0 points if no attempt made  
+
+
+**Retrieving your work**
+
+This and all future homework .Rmd files are written in RMarkdown. The .Rmd file is rendered as an .html file for easier viewing. This and all future homework assignments are located in the **homework** directory within the **stat385-sp21-course-content** repo, i.e. **stat385-sp21-course-content/homework** in GitHub. It is always recommended that you **pull** (or refresh) the **stat385-sp21-course-content** repo to ensure that you have the most updated version of all course content including the homework assignments. After pulling (or refreshing) the **stat385-sp21-course-content** repo, the homework file will be in the homework directory. 
+
+**Submitting your work**
+
+In your individual student repo (named as your netID), you are to submit ***two*** files:
+
+a. Your reproducible document file (.Rmd) which should be saved as homework##-netID.Rmd. For example, my homework 01 file would be saved as homework01-kinson2.Rmd.
+
+b. Your rendered reproducible document file (.html) which should be saved as homework##-netID.html. For example, my homework 01 file would be saved as homework01-kinson2.html.
+
+You have an unlimited number of submissions, but only the latest proper submission (commit and push) will be viewed and graded. **Remember the .Rmd file needs to render properly to .html before submitting.** 
+
+
+***
+
+Students are expected to complete all problems.
+
+*The following problems should be completed by you as an individual. If any problem asks you a particular question, be sure to answer it completely (with code, written sentences, or both). Written sentences should not appear in code chunks or code cells. Written sentences should appear in Markdown syntax unless specifically stated otherwise.*
+
+***Do not change anything in this file above the double line.***
+
+***
+***
+
+### Use only R and RMarkdown for this entire homework assignment. Use the URLs to access the data (if any). No local files allowed. Functions or programming ideas beyond the topics/ideas covered thus far are not allowed. The `subset` function is never allowed in this course.
+
+#### If you have not installed the "tidyverse" and "microbenchmark" packages on your computer, then you need to install them in order to complete this assignment successfully. Do not include `install.packages()` as executable code in your submitted homework files. Doing so will result in a grade of 0 on this assignment.
+
+
+**#1** (Markdown) Using Markdown syntax, make a numbered list with your first name in normal text as the first item and your last name in italic text as the second item.
+1. Yeonchul
+2. *Choi*
+
+
+**#2** (Personal survey, Markdown) Think about the previous three weeks (your experiences, assignments, life). Using Markdown, describe in paragraph form (with at least 3 complete sentences) what was the most challenging part(s) about the midterm exam, the most challenging part(s) about your weeks 05-07, and the thing(s) that made your weeks successful or unsuccessful.
+-By working on exam, it was really challenge that solving problems without assigning any objects, and I learned how to make my own function in codes last three weeks.
+
+
+**#3** (Vectorization, Markdown) The `sum()` function is an example of **summarization** because it takes a vector as input and returns a single summary value. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+TRUE
+
+
+**#4** (Introduction to R Chapter 9, Markdown) **Condition-controlled loops** are those in which repetitive actions are repeated for a predetermined number of times and stopped when the that number of times is reached. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+FALSE
+**Index-controlled loops**
+
+
+**#5** (Introduction to R Chapter 2, Introduction to R Chapter 9, Introduction to R Chapter 10) Create one custom function that converts measurements to units of temperature including: Fahrenheit, Kelvin, and Celsius. In particular, your function should be able to take three inputs: the number, original temperature unit, converted temperature unit. Your function should return one output as a single phrase containing the converted value. **For example, if the three inputs are 2, "Fahrenheit", "Kelvin" then your function returns the character string "2 degrees Fahrenheit equals X Kelvin". Kelvin is not in degrees, but Fahrenheit and Celsius are in degrees.** Convert the following:
+```{r}
+temp = function(x, input, output){
+  if (input == "Celsius"){
+    if (output == "Fahrenheit")
+      y = x * 9/5 + 32
+    else if (output == "Kelvin")
+      y = x + 273.15
+  }
+  else if (input == "Fahrenheit"){
+    if (output == "Celsius")
+      y = (x - 32) * (5/9)
+    else if (output == "Kelvin")
+      y = ((x - 32) * (5/9)) + 273.15
+  }
+  else if (input == "Kelvin"){
+    if (output == "Celsius")
+      y = x - 273.15
+    else if (output == "Fahrenheit")
+      y = (x - 273.15) * (9/5) + 32
+  }
+  if (input == output){
+    y = x
+  }
+
+  if (input != "Kelvin"){
+    x = paste(x, "degrees")
+  }
+  if (output != "Kelvin"){
+    y = paste(y, "degrees")
+  }
+  paste(x, input, "equals", y, output)
+}
+```
+i. 46 Fahrenheit to Kelvin
+
+ii. 48 Celsius to Fahrenheit
+```{r}
+#i.
+temp(46,'Fahrenheit','Kelvin')
+#ii.
+temp(48,'Celsius','Fahrenheit')
+```
+
+
+**#6** (Introduction to the tidyverse, Importing data, Introduction to R Chapter 3) Import the Champaign County Sheriff Office & Jail Dataset and its data URL (either [Box](https://uofi.box.com/shared/static/b2rf2r9st2xojtsdcktn698cbkyrgfp3.dat) or [GitHub](https://github-dev.cs.illinois.edu/stat385-s2-sp21/stat385-sp21-course-content/raw/master/data/ccso-jail-data-sp21.dat)) and print its structure. Read the data descriptions to help verify the import was successful.
+
+  - The dataset (a .dat file) contains over 11083 observations and 38 columns for individuals who were booked into jail in Champaign County. The individuals are not identifiable based on personal identity, but they are given unique jacket numbers. Some rows in the data appear more than once because of multiple crimes being assigned to one person. But there is also the possibility of there being recidivists. A recidivist is a person who goes to jail repeatedly (more than one datetime). The demographics of the people, reasons for being booked, and crime code are also given in the data. The original source is the Champaign County Sheriff Office & Jail (CCSO).
+```{r}
+library(tidyverse)
+```
+```{r}
+df = read_delim('https://uofi.box.com/shared/static/b2rf2r9st2xojtsdcktn698cbkyrgfp3.dat', delim=',')
+str(df)
+```
+
+
+
+**#7** (Tibbles, Introduction to tidyverse, Wrangling data) Using the tidyverse, Champaign County Sheriff Office & Jail imported in **Problem 6**, and the data description, create a new tibble named `cash_bonds` that contains a wrangled version of the jail data that does the following in this order:  
+
+- i. filters the races or ethnicities to include Black, White, and a new third category called "Other" containing any races or ethnicities that are not black or white but excludes "Unknown" race values
+
+- ii. filters release reason description as "Cash Bond Posted"
+
+- iii. replaces any column names containing the character string "booking" with the character string "booked" 
+
+- iv. arranges to sort in descending order of age at arrest
+
+- v. selects the columns: jacket number, age at arrest, race, city, crime, and release reason description
+
+Now, print the first 10 observations of `cash_bonds` data.
+```{r}
+library(tibble)
+```
+```{r}
+#i
+cash_bonds=df
+a=cash_bonds$race!='Black' & cash_bonds$race!='White'&cash_bonds$race!='Unknown'
+cash_bonds$race[a]='Other'
+#ii
+cash_bonds=filter(cash_bonds,`release reason description`=='Cash Bond Posted')
+#iii
+names(cash_bonds) = gsub('booking','booked',names(cash_bonds))
+#iv
+cash_bonds=arrange(cash_bonds,desc(`age arrest`))
+#v
+cash_bonds=select(cash_bonds,`jacket_number`,`age arrest`,race,city,crime,`release reason description`)
+
+head(cash_bonds,10)
+```
+
+
+**#8** (Introduction to tidyverse, Wrangling data) Using the tidyverse, Champaign County Sheriff Office & Jail imported in **Problem 6**, and the data description, answer the following question in Markdown syntax and complete sentence(s): 
+
+- Which of these groups spends the most median time in jail in hours:  
+  - black women aged (at arrest) 25 and above,  
+  - black women aged (at arrest) 24 and below,  
+  - black men aged (at arrest) 25 and above,  
+  - black men aged (at arrest) 24 and below,  
+  - white women aged (at arrest) 25 and above,  
+  - white women aged (at arrest) 24 and below,  
+  - white men aged (at arrest) 25 and above, or  
+  - white men aged (at arrest) 24 and below?
+
+- Which of these groups spends the least median time in jail in hours:  
+  - black women aged (at arrest) 25 and above,  
+  - black women aged (at arrest) 24 and below,  
+  - black men aged (at arrest) 25 and above,  
+  - black men aged (at arrest) 24 and below,  
+  - white women aged (at arrest) 25 and above,  
+  - white women aged (at arrest) 24 and below,  
+  - white men aged (at arrest) 25 and above, or  
+  - white men aged (at arrest) 24 and below?
+```{r}
+# black women aged (at arrest) 25 and above,  
+median((filter(df,`race` == 'Black' & `age arrest` >= 25 & `sex` == 'Female'))$hours)
+# black women aged (at arrest) 24 and below,
+median((filter(df,`race` == 'Black' & `age arrest` <= 24 & `sex` == 'Female'))$hours)
+# black men aged (at arrest) 25 and above,
+median((filter(df,`race` == 'Black' & `age arrest` >= 25 & `sex` == 'Male'))$hours)
+# black men aged (at arrest) 24 and below,
+median((filter(df,`race` == 'Black' & `age arrest` <= 24 & `sex` == 'Male'))$hours)
+# white women aged (at arrest) 25 and above,
+median((filter(df,`race` == 'White' & `age arrest` >= 25 & `sex` == 'Female'))$hours)
+# white women aged (at arrest) 24 and below,
+median((filter(df,`race` == 'White' & `age arrest` <= 24 & `sex` == 'Female'))$hours)
+# white men aged (at arrest) 25 and above, or
+median((filter(df,`race` == 'White' & `age arrest` >= 25 & `sex` == 'Male'))$hours)
+# white men aged (at arrest) 24 and below?
+median((filter(df,`race` == 'White' & `age arrest` <= 24 & `sex` == 'Male'))$hours)
+```
+**For the above questions, you must answer in Markdown syntax in a complete sentence and show code as evidence of your answer.**
+- Black men aged (at arrest) 25 and above spends the most median time in jail.
+- White women aged (at arrest) 24 and below spends the least median time in jail.
+
+
+
+**#9** (Introduction to R Chapter 9, Apply family of functions, Coding principles) **microbenchmark** is an R package that can be useful for determining how efficient two functions might be relative to one another. This problem wants students to consider coding principles and ideas covered in this course. Within the `microbenchmark` function, the first argument is a data input; the second argument is the provided function; the third argument is `your_function()` which is a function you create. **In the code chunk below, you are changing the `your_function()` portion which affects the third argument only of `microbenchmark`, while leaving the first two arguments unchanged. The `your_function` code can be an existing function, but not a tidyverse function.** The only way to earn 2 points on this problem is that both the mean and median of `your_function()` must be faster than the `provided_function()`. See the code below to get your ideas flowing.
+
+```{r}
+#################
+#data generation#
+#################
+dat0 <- rmultinom(100,1:5,c(0.2,0.05,0.05,0.3,0.4))
+dat0[1,dat0[1,]==1] <- 1
+dat0[2,dat0[2,]==1] <- 2
+dat0[3,dat0[3,]==1] <- 3
+dat0[4,dat0[4,]==1] <- 4
+dat0[5,dat0[5,]==1] <- 5
+dat1 <- colSums(dat0)
+dat <- cbind(col1=rnorm(100), col2=purrr::rbernoulli(100), col3=dat1)
+
+###################
+#provided function#
+###################
+provided_function <- function(input){
+  t(rowsum(input[,1],input[,3]))/c(table(input[,3]))
+}
+
+###############
+#your function#
+###############
+your_function <- function(df){
+  list = sort(unique(df[,3]))
+  len = length(list)
+  ans = matrix(nrow=1,ncol=len)
+
+  for (i in 1:len) {
+    indx = df[,3] == list[i]
+    ans[,i] = sum(df[indx,1])/sum(indx)
+  }
+  
+  return(ans)
+}
+
+microbenchmark::microbenchmark(provided_function(dat), your_function(dat))
+```
+
+
+
+**#10** (Introduction to R Chapter 9, Coding principles, Introduction to tidyverse, Wrangling data) **microbenchmark** is an R package that can be useful for determining how efficient two functions might be relative to one another. This problem wants students to consider coding principles and ideas covered in this course. Within the `microbenchmark` function, the first argument is a data input; the second argument is the provided function; the third argument is `your_function()` which is a function you create. **In the code chunk below, you are changing the `your_function()` portion which affects the third argument only of `microbenchmark`, while leaving the first two arguments unchanged. The `your_function` code must contain tidyverse functionality.** The only way to earn 2 points on this problem is that either the mean or median of `your_function()` must be faster than the `provided_function()`. See the code below to get your ideas flowing.
+
+```{r}
+#################
+#data generation#
+#################
+
+dat0 <- rmultinom(100,1:5,c(0.2,0.05,0.05,0.3,0.4))
+dat0[1,dat0[1,]==1] <- 1
+dat0[2,dat0[2,]==1] <- 2
+dat0[3,dat0[3,]==1] <- 3
+dat0[4,dat0[4,]==1] <- 4
+dat0[5,dat0[5,]==1] <- 5
+dat1 <- as.character(colSums(dat0))
+dat2 <- tibble(col1=rnorm(100), col2=purrr::rbernoulli(100), col3=dat1)
+dat2%>%group_by(col3)%>%summarise(mean(col1))
+
+###################
+#provided function#
+###################
+provided_function <- function(input){
+  input %>%
+    group_by(col3) %>%
+    summarise(mean(col1))
+}
+
+###############
+#your function#
+###############
+your_function <- function(df){
+   aggregate(df$col1 ~ df$col3, FUN = function(x) {summary(x)})
+}
+
+microbenchmark::microbenchmark(provided_function(dat2), your_function(dat2))
+```
+
+
+
+
+

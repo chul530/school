@@ -1,0 +1,296 @@
+---
+title: "STAT 385 Statistics Programming Methods - Spring 2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Final Exam 
+### Due: Tuesday May 11, 2021 11:59 pm US Central Time
+#### Created by Course staff
+
+Grading Rubric (per question):  
+2 points if complete and correct  
+1 point if incomplete or incorrect  
+0 points if no attempt made  
+
+
+**Retrieving your work**
+
+This .Rmd file is written in RMarkdown. The .Rmd file is rendered as an .html file for easier viewing. This is located in the **exams** directory within the **stat385-sp21-course-content** repo, i.e. **stat385-sp21-course-content/exams** in GitHub. It is always recommended that you **pull** (or refresh) the **stat385-sp21-course-content** repo to ensure that you have the most updated version of all course content. After pulling (or refreshing) the **stat385-sp21-course-content** repo, the exam file will be in the exam directory. 
+
+**Submitting your work**
+
+In your individual student repo (named as your netID), you are to submit ***two*** files:
+
+a. Your reproducible document file (.Rmd) which should be saved as final-netID.Rmd. For example, my final file would be saved as final-kinson2.Rmd.
+
+b. Your rendered reproducible document file (.html) which should be saved as final-netID.html. For example, my final file would be saved as final-kinson2.html.
+
+You have an unlimited number of submissions, but only the latest proper submission (commit and push) will be viewed and graded. **Remember the .Rmd file needs to render properly to .html before submitting.** 
+
+
+***
+
+Students are expected to complete all problems.
+
+*The following problems should be completed by you as an individual. If any problem asks you a particular question, be sure to answer it completely (with code, written sentences, or both). Written sentences should not appear in code chunks or code cells. Written sentences should appear in Markdown syntax unless specifically stated otherwise.*
+
+***Do not change anything in this file above the double line.***
+
+***
+***
+
+### Use only R and RMarkdown for this entire assignment. Use the URLs to access the data (if any). No local files allowed. The `subset()` function is never allowed in this course. Only use `set.seed()` when instructed.
+
+### If you have not installed the "tidyverse" package on your computer, then you need to install that package in order to complete the exam successfully. Do not include `install.packages()` as executable code in your submitted exam files. Doing so will result in a grade of 0 on the exam.
+
+**#1** Using Markdown syntax, make a numbered list with your first name in normal text as the first item and your last name in italic text as the second item.
+
+1. Yeonchul
+2. *Choi*
+
+
+**#2** **Merge conflicts** are the erroneous result of files being changed in the local remote repo without first pulling the repo in GitHub. 
+
+If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+TRUE
+
+**#3** Beginning with the `chickwts` dataset, answer the following question in Markdown syntax and complete sentence(s): 
+
+- How many chickens weigh over 0.50 pounds?
+
+**You must answer in Markdown syntax in a complete sentence and show code as evidence of your answer. The help documentation, `?chickwts`, may be useful in completing this problem.**
+
+```{r}
+data(chickwts)
+weight = chickwts$weight
+weight = weight*0.00220462 
+length(weight[weight>0.50])
+```
+-47 chickens weight over 0.50 pounds.
+
+**#4** Reproduce the result using vectors, sequences, and no more than one additional base R function. Using `c()` and `seq()` are allowed in addition to the one base R function. This one base R function could be used multiple times. *The shape, height, and width of the result do not matter, but you cannot simply use brute force.*
+
+``` 
+"goldeneye+0010"  "goldeneye+0020"  "goldeneye+0030"  "goldeneye+0040"  "goldeneye+0050" "goldeneye+0060"  "goldeneye+0070"
+```
+
+```{r}
+x=seq(10,70,length.out=7)
+q4=paste0("goldeneye+00",x)
+q4
+```
+
+
+**#5** Answer the following question in Markdown syntax and complete sentence(s): 
+
+- Based on the formula below, what is the value of someone's down payment in US Dollars, $d$?
+
+$$ n = \frac{\mathrm{ln} \left( \frac{r}{\frac{m}{p} - r} + 1 \right)}{\mathrm{ln}(1 + r)}$$
+
+- $n=360$: number of mortgage payment terms.  
+- $m=1250$: the monthly payment amount (US Dollars).  
+- $p=?$: the loan amount (US Dollars).  
+- $r=0.00475$: the monthly interest rate.  
+- $d=0.2\cdot p$: down payment (US Dollars). 
+
+**You must answer in Markdown syntax in a complete sentence and show code as evidence of your answer.**
+
+```{r}
+n=360
+m=1250
+r=0.00475
+p=(m*exp(n*log(1+r))-m)/(r*exp(n*log(1+r)))
+d=0.2*p
+d
+```
+-43073.71 is the value of the someone's down payment in US Dollar.
+
+**#6** Using one programming language, create one custom user-defined tool that converts measurements of units of length including: inches, centimeters, and feet. Any value should be allowed to be a decimal value. In particular, your function should be able to take three inputs: the number, original length unit, converted length unit. Your function should return one output as a single phrase containing the converted value. **For example, if the three inputs are 2.5, "inches", "feet" then your function should return "2.5 inches equals X feet", where you have computed the number X. ** Convert the following:
+
+```{r}
+length = function(x, input, output){
+  if (input == "inches"){
+    if (output == "centimeters")
+      y = x * 2.54
+    else if (output == "feet")
+      y = x /12
+  }
+  else if (input == "centimeters"){
+    if (output == "feet")
+      y = x/30.48
+    else if (output == "inches")
+      y = x/2.54
+  }
+  else if (input == "feet"){
+    if (output == "inches")
+      y = x*12
+    else if (output == "centimeters")
+      y = x*30.48
+  }
+  if (input == output){
+    y = x
+  }
+  paste(x, input, "equals", y, output)
+}
+```
+
+i. 112 inches to feet
+```{r}
+length(112,'inches','feet')
+```
+ii. 6.48 feet to centimeters
+```{r}
+length(6.48,'feet','centimeters')
+```
+
+
+**#7** Beginning with R's internal `mtcars` dataset and using tidyverse functionality, use regex and string manipulation to print the very first word of each car's name, e.g., the manufacturer name of a Ford Focus SE is Ford. **You must use tidyverse functionality to complete this problem. There should be 32 names.**
+
+```{r}
+library(tidyverse)
+data(mtcars)
+car= rownames(mtcars)
+car = word(car, 1)
+car
+```
+
+**#8** Beginning with the `mtcars` dataset and using tidyverse functionality, use regex and string manipulation to print the very first word of each car's model name, e.g., the model name of a Ford Focus SE is Focus SE. **You must use tidyverse functionality to complete this problem. There should be 32 names.**
+
+```{r}
+model = rownames(mtcars)
+model = word(model, 2, -1)
+model
+```
+
+**#9** Create a tibble (named as `df01`) with three columns such that column 1 contains the last 10 capitalized letters of the alphabet in repeating sequence (i.e. Q, Q, R, R, ..., Z, Z), column 2 contains 20 positive random continuous standard normal distribution deviates rounded to the hundredths place, and column 3 contains a randomized ordering of the concatenated values of columns 1 and 2. **The concatenation should have an underscore'_' sign between the values of columns 1 and 2. For example, the concatenated values might appear as "Q_1.5". There should be only 20 rows in `df01`.**  
+
+```{r}
+library(tibble)
+col1 = LETTERS[-c(1:16)]
+col1 = c(col1,col1)
+col1 = sort(col1)
+
+col2 = rnorm(20)
+col2 = round(col2, 2)
+
+col3 = paste0(col1,"_",col2)
+col3 = sample(col3, 20, replace = FALSE)
+
+df01 = cbind(col1, col2, col3)
+df01 = as_tibble(df01)
+df01
+```
+
+**#10** Let `df02` be equal to the `df01` that was in **Problem 9**. Now, create a new `df02` that has its entire rows reordered such that the column 2 numeric values are in decreasing order. *Column 2 is determining the row order for the entire object; not just switching the order of column 2 alone.* Print the resulting `df02`. *There should be only 20 rows in `df02`.*
+
+```{r}
+df02 = df01
+df02 = df02[order(df02[,2], decreasing = TRUE), ]
+df02
+```
+
+**#11** Create two new vectors `x01` and `x02` such that `x01` coerces the second column of the tibble `df01` in **Problem 9** to be a logical vector such that any number greater than 1.30 should have a logical value of TRUE, while `x02` is a sequence of 20 elements beginning with 1.00 and ending with 1.01. Now, print both `x01` and `x02`.
+
+```{r}
+x01=df01[,2]
+x01 = x01 > 1.30
+x01
+```
+```{r}
+x02 = seq(1.00,1.01, length.out=20)
+x02
+```
+
+**#12** The **ui** within a Shiny app builds the output of the app such as the plot, table, and text by first recognizing the input or data values with the help of reactivity.
+
+If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+FALSE
+**server**
+
+**#13** Select the scenario(s) that are appropriate for using parallel programming. There may be more than one scenario that is appropriate. To select an answer, place an x within the brackets as `[x]`.
+
+- [ ] computer has less than 1 core or less than 1 processor
+
+- [x] code can be made into independent repetitive chunks
+
+- [x] large-scale computational needs
+
+- [ ] sequential code takes microseconds to run on a single computer
+
+
+
+**#14** Using tidyverse functionality, import the US State-level COVID-19 Historical Data from the New York Times and the Harvard's US Presidential Election Data using the data URLs [covid](https://github.com/nytimes/covid-19-data/raw/master/us-states.csv) and [election - Box](https://uofi.box.com/shared/static/01k9up8gefdpo9t23sgu9gq5f36pylp9.csv) or [election - GitHub](https://github-dev.cs.illinois.edu/stat385-s2-sp21/stat385-sp21-course-content/raw/master/data/us-presidential-election-data-pp-sp21.csv). Now, print the structure for each dataset.
+
+- Data information: The "covid" dataset (a .csv file) contains the number of COVID-19 cases and deaths per state as a time series. The "election" data (a .csv file) contains how each state voted in the each US Presidential Election and the number of votes each candidate received along with their political party affiliations. The candidate receiving the most votes can usually be considered as the winner of that state along with their political party. In other words, the state's political party affiliation is based on the candidate who who received the most votes for that state.
+
+```{r}
+covid = read_delim('https://github.com/nytimes/covid-19-data/raw/master/us-states.csv', delim=',')
+election = read_delim('https://uofi.box.com/shared/static/01k9up8gefdpo9t23sgu9gq5f36pylp9.csv', delim=',')
+```
+```{r}
+str(covid)
+str(election)
+```
+
+**#15** Beginning with the imported "covid" data, answer the following question:
+
+- Which states are in the top 10 for the largest number of positive cases of COVID-19 (at the date of May 07, 2021)? 
+
+**Your question should be answered in complete sentence(s) in Markdown syntax, and the resulting tidyverse code and data print out should serve as evidence.**
+
+```{r}
+covid = covid[covid$date == "2020-05-07", ]
+covid = covid[,c("state","cases")]
+covid = covid %>%
+  group_by(state) %>%
+  summarise_all(funs(sum))
+covid = covid[order(covid$cases, decreasing = TRUE), ]
+head(covid,10)
+```
+-New York, New Jersey, Massachusetts, Illinois, California, Pennsylvania, Michigan, Florida, Texas, Connecticut are the top 10 for the largest number of positive cases of COVID-19 at the date of May 07, 2021.
+
+**#16** Beginning with the imported "election" data, answer the following question:
+
+- In the year 2000 election, who earned the most votes and how many votes did they have?
+
+**Your question should be answered in complete sentence(s) in Markdown syntax, and the resulting tidyverse code and data print out should serve as evidence.**
+
+```{r}
+election = election[election$year == "2000", ]
+election = election[,c("candidate","candidatevotes")]
+election = election %>%
+  group_by(candidate) %>%
+  summarise_all(funs(sum))
+election = election[order(election$candidatevotes, decreasing = TRUE), ]
+head(election,10)
+```
+-Gore, Al earned the most votes and he got  50996062 votes.
+
+**#17** In a **repeat** loop, the grouped expressions execute until the condition is TRUE.
+
+If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+TRUE
+
+**#18** Based on the code chunk below, answer the following question.
+
+- What does the `do.call()` actually do in this code?
+
+```{r eval=FALSE}
+list0 <- list()
+for (i in 1:10){
+  size <- sample(100,1)
+  list0[[i]] <- data.frame(a=sample(letters, size, replace=TRUE))
+}
+list0
+mat0 <- do.call("rbind", list0)
+mat0
+```
+
+**Your question should be answered in complete sentence(s) in Markdown syntax. No coding (on your part) is required in this problem.**
+
+- The `do.call()` function stacked each component in `list0` on top of each other for each index `i`.

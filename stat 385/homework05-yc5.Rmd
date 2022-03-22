@@ -1,0 +1,324 @@
+---
+title: "STAT 385 Statistics Programming Methods - Spring 2021"
+output: html_document
+---
+
+## Homework 05
+### Due: Monday April 12, 2021 11:59 pm US Central Time
+#### Created by Course staff
+
+Grading Rubric (per question):  
+2 points if complete and correct  
+1 point if incomplete or incorrect  
+0 points if no attempt made  
+
+
+**Retrieving your work**
+
+This and all future homework .Rmd files are written in RMarkdown. The .Rmd file is rendered as an .html file for easier viewing. This and all future homework assignments are located in the **homework** directory within the **stat385-sp21-course-content** repo, i.e. **stat385-sp21-course-content/homework** in GitHub. It is always recommended that you **pull** (or refresh) the **stat385-sp21-course-content** repo to ensure that you have the most updated version of all course content including the homework assignments. After pulling (or refreshing) the **stat385-sp21-course-content** repo, the homework file will be in the homework directory. 
+
+**Submitting your work**
+
+In your individual student repo (named as your netID), you are to submit ***two*** files:
+
+a. Your reproducible document file (.Rmd) which should be saved as homework##-netID.Rmd. For example, my homework 01 file would be saved as homework01-kinson2.Rmd.
+
+b. Your rendered reproducible document file (.html) which should be saved as homework##-netID.html. For example, my homework 01 file would be saved as homework01-kinson2.html.
+
+You have an unlimited number of submissions, but only the latest proper submission (commit and push) will be viewed and graded. **Remember the .Rmd file needs to render properly to .html before submitting.** 
+
+
+***
+
+Students are expected to complete all problems.
+
+*The following problems should be completed by you as an individual. If any problem asks you a particular question, be sure to answer it completely (with code, written sentences, or both). Written sentences should not appear in code chunks or code cells. Written sentences should appear in Markdown syntax unless specifically stated otherwise.*
+
+***Do not change anything in this file above the double line.***
+
+***
+***
+
+### Use only R and RMarkdown for this entire homework assignment. Use the URLs to access the data (if any). No local files allowed. Functions or programming ideas beyond the topics/ideas covered thus far are not allowed. The `subset` function is never allowed in this course.
+
+**#1** (Markdown) Using Markdown syntax, make a numbered list with your first name in normal text as the first item and your last name in italic text as the second item.
+
+1. Yeonchul
+2. *Choi*
+
+**#2** (Personal survey, Markdown) Think about the previous two weeks (your experiences, assignments, life). Using Markdown, describe in paragraph form (with at least 3 complete sentences) what was the most challenging part(s) about the homework 04, the most challenging part(s) about your weeks 08-09, and the thing(s) that made your weeks successful or unsuccessful.
+
+-For last week there is nothing challenge except last question of the homework it was little hard to understand what the question is asking for
+
+**#3** (Regular Expressions and String Manipulation, Markdown) The function **str_extract_all()** extracts the first matched pattern. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+-FALSE
+-**str_extract()**
+
+**#4** (Introduction to R Chapter 5, Markdown) To count the number of members of each group in a given vector, we could use the **table()** function in base R. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+-FALSE
+-**length()**
+
+**#5** (Introduction to R Chapter 2, Introduction to R Chapter 9, Introduction to R Chapter 10) Create one custom function that converts measurements to units of temperature including: Fahrenheit, Kelvin, and Celsius. In particular, your function should be able to take three inputs: the number, original temperature unit, converted temperature unit. Your function should return one output as a single phrase containing the converted value. **For example, if the three inputs are 2, "Fahrenheit", "Kelvin" then your function returns the character string "2 degrees Fahrenheit equals X Kelvin". Kelvin is not in degrees, but Fahrenheit and Celsius are in degrees.** Convert the following:
+
+i. 46 Fahrenheit to Celsius
+
+ii. 48 Celsius to Celsius
+
+iii. 46 Kelvin to Fahrenheit
+
+iv. 46 Kelvin to Celsius
+
+```{r}
+temp = function(x, input, output){
+  if (input == "Celsius"){
+    if (output == "Fahrenheit")
+      y = x * 9/5 + 32
+    else if (output == "Kelvin")
+      y = x + 273.15
+  }
+  else if (input == "Fahrenheit"){
+    if (output == "Celsius")
+      y = (x - 32) * (5/9)
+    else if (output == "Kelvin")
+      y = ((x - 32) * (5/9)) + 273.15
+  }
+  else if (input == "Kelvin"){
+    if (output == "Celsius")
+      y = x - 273.15
+    else if (output == "Fahrenheit")
+      y = (x - 273.15) * (9/5) + 32
+  }
+  if (input == output){
+    y = x
+  }
+
+  if (input != "Kelvin"){
+    x = paste(x, "degrees")
+  }
+  if (output != "Kelvin"){
+    y = paste(y, "degrees")
+  }
+  paste(x, input, "equals", y, output)
+}
+```
+
+```{r}
+# 46 Fahrenheit to Celsius
+temp(46, "Fahrenheit", "Celsius")
+```
+
+```{r}
+# 48 Celsius to Celsius
+temp(48, "Celsius", "Celsius")
+```
+
+```{r}
+# 46 Kelvin to Fahrenheit
+temp(46, "Kelvin", "Fahrenheit")
+```
+
+```{r}
+# 46 Kelvin to Celsius
+temp(46, "Kelvin", "Celsius")
+```
+
+**#6** (Introduction to the tidyverse, Importing data, Introduction to R Chapter 3) Import the Champaign County Sheriff Office & Jail Dataset and its data URL (either [Box](https://uofi.box.com/shared/static/b2rf2r9st2xojtsdcktn698cbkyrgfp3.dat) or [GitHub](https://github-dev.cs.illinois.edu/stat385-s2-sp21/stat385-sp21-course-content/raw/master/data/ccso-jail-data-sp21.dat)) and print its structure. Read the data descriptions to help verify the import was successful.
+
+  - The dataset (a .dat file) contains over 11083 observations and 38 columns for individuals who were booked into jail in Champaign County. The individuals are not identifiable based on personal identity, but they are given unique jacket numbers. Some rows in the data appear more than once because of multiple crimes being assigned to one person. But there is also the possibility of there being recidivists. A recidivist is a person who goes to jail repeatedly (more than one datetime). The demographics of the people, reasons for being booked, and crime code are also given in the data. The original source is the Champaign County Sheriff Office & Jail (CCSO).
+
+```{r}
+library(tibble)
+library(dplyr)
+library(tidyverse)
+```
+
+```{r}
+df = read_delim('https://uofi.box.com/shared/static/b2rf2r9st2xojtsdcktn698cbkyrgfp3.dat', delim=',')
+str(df)
+```
+
+
+**#7** (Tibbles, Introduction to tidyverse, Wrangling data, Regular expressions and string manipulation) Champaign, Danville, Rantoul, Savoy, and Urbana are just five towns in Champaign County. Using the CCSO Jail Data imported in **Problem 6**, create a new data object called `cc` that contains any person booked into jail who resides in these five towns. Afterwards, arrange by the city name in alphabetical order and select the following columns: jacket number, age at arrest, city, state, sex, race. Now, print the first 5 and the last 5 observations of `cc`. **In this problem, you should make sure the five towns are correctly spelled. You do not have to remove duplicates in this problem.**
+
+```{r}
+cc = filter(df, `city`=='CHAMPAIGN' | `city` == "DANVILLE" | `city` == "RANTOUL" | `city` == "SAVOY" | `city` == "URBANA")
+
+unique(cc$city)
+cc = cc[order(cc$city),]
+cc = select(cc, `jacket_number`, `age arrest`, `city`, `state`, `sex`, `race`)
+head(cc, 5)
+tail(cc, 5)
+```
+
+**#8** (Introduction to tidyverse, Wrangling data, Regular expressions and string manipulation) Excluding the 5 Illinois towns mentioned in **Problem 7**, there are at least 10 other Illinois city names that inconsistent in this data. Meaning that at least 10 cities in Illinois have two different spellings in this data. Using the CCSO Jail Data imported in **Problem 6**, create a new data object called `IL` that contains any person booked into jail who resides in these 10 cities in Illinois. Afterwards, arrange by the city name in alphabetical order and select the following columns: jacket number, age at arrest, city, state, sex, race. Now, print the first 10 and the last 10 observations of `IL`. **In this problem, you should make sure the 10 cities are correctly spelled. Check this [list of municipalities](https://en.wikipedia.org/wiki/List_of_municipalities_in_Illinois) in Illinois for correct city spellings. You do not have to remove duplicates in this problem.**
+
+```{r}
+q7= df$city!='CHAMPAIGN' & df$city!='DANVILLE'&
+df$city!='RANTOUL' & df$city != 'SAVOY' & df$city != 'URBANA'
+IL = filter(df, q7)
+IL = filter(IL, IL$state == "ILLINOIS")
+IL = IL[order(IL$city), ]
+unique(IL$city)
+
+IL$city[IL$city == "BOURBANNAIS" ] = "BOURBONNAIS"
+IL$city[IL$city == "CALMUT CITY"] = "CALUMET CITY"
+IL$city[IL$city == "CHIGAGO"] = "CHICAGO"
+IL$city[IL$city == "DALTON"] = "DOLTON"
+IL$city[IL$city == "EAST SAINT LOUIS"] = "EAST ST LOUIS"
+IL$city[IL$city == "GIPSON CITY"] = "GIBSON CITY"
+IL$city[IL$city == "MATTON"] = "MATTOON"
+IL$city[IL$city == "SEYMORE"] = "SEYMOUR"
+IL$city[IL$city == "ST. JOSPEH"] = "ST. JOSEPH"
+IL$city[IL$city == "THOMASBORRO"] = "THOMASBORO"
+
+IL = filter(df, `city`=='BOURBONNAIS' | `city` == "CALUMET" | `city` == "CHICAGO" | `city` == "DOLTON" | `city` == "EAST ST LOUIS" | `city` == "GIBSON CITY" | `city` == "MATTOON" | `city` == "SEYMOUR" | `city` == "ST. JOSEPH" | `city` == "THOMASBORO")
+IL = IL[order(IL$city),]
+IL = select(IL, `jacket_number`, `age arrest`, `city`, `state`, `sex`, `race`)
+head(IL, 10)
+tail(IL, 10)
+```
+
+**#9** (Let's Build Some Uno Programs) Beginning with the **Program 4 - Playing 1 Card per Player** in Week 11 Notes, add code necessary to allow a player to play "Skip" in order to match the top card of the **discard** pile. **This problem does not depend on Problem 10.**
+```{r}
+shuffle <- function(cards){
+  cards[sample(nrow(cards)),]
+}
+```
+
+```{r}
+deck_orig <- read_csv("https://uofi.box.com/shared/static/3xrqq7ycdhbaktqs705o3x5you2c9iz4.csv")
+deck_shuffled <- shuffle(deck_orig)
+head(deck_shuffled)
+```
+```{r}
+choosing_dealer0 <- function(cards,players){
+  new_cards <- shuffle(cards)
+  paste0("The dealer will be player",order(new_cards$points[1:players], decreasing = TRUE)[1])
+}
+choosing_dealer0(deck_orig,5)
+```
+
+```{r}
+choosing_dealer <- function(cards,players){
+  new_cards <- shuffle(cards)
+  if(length(which(new_cards$points[1:players]==max(new_cards$points[1:players])))>1){
+    tiebreaker <- cbind(runif(length(which(new_cards$points[1:players]==max(new_cards$points[1:players])))), which(new_cards$points[1:players]==max(new_cards$points[1:players])))
+    paste0("The dealer will be player", tiebreaker[which(tiebreaker[,1]==max(tiebreaker[,1])),2])
+  }
+  else{
+    paste0("The dealer will be player",order(new_cards$points[1:players], decreasing = TRUE)[1])
+  }
+}
+choosing_dealer(deck_orig,5)
+```
+
+```{r}
+deal <- function(cards,players){
+  cards[,ncol(cards)+1] <- ""
+  for (i in 1:players){
+    cards[(0:6)*players+i,ncol(cards)] <- paste0("player",i)
+  }
+  colnames(cards)[ncol(cards)] <- "playerID"
+  assign("draw_pile",cards[cards$playerID=="",],envir=globalenv())
+  return(cards[cards$playerID!="",])
+}
+```
+
+```{r}
+deal(deck_shuffled, 5)
+draw_pile
+```
+
+
+```{r}
+discard_pile <- draw_pile %>%
+  filter(colors=="blue"|colors=="green"|colors=="red"|colors=="yellow") %>%
+  filter(faces!="Draw+2", faces!="Wild", faces!="WildDraw+4", faces!="Skip", faces!="Reverse") %>%
+  slice_head(n=1)
+draw_pile <- draw_pile[-which(draw_pile$faces==discard_pile$faces & draw_pile$colors==discard_pile$colors)[1],]
+```
+
+```{r}
+play <- function(cards0, draw0, discard0){
+  hand <- split(cards0, cards0$playerID)
+  for (i in 1:length(unique(cards0$playerID))){
+    if(any(cards0$faces[cards0$playerID==paste0("player",i)] %in% discard0$faces)){
+      hand[[i]] <- hand[[i]][-which(cards0$faces[cards0$playerID==paste0("player",i)] %in% discard0$faces)[1],] 
+      assign( "discard_pile",cards0[which(cards0$playerID==paste0("player",i) & cards0$faces==discard0$faces)[1],],envir = globalenv() )
+    }
+    else if(any(cards0$colors[cards0$playerID==paste0("player",i)] %in% discard0$colors)){
+      hand[[i]] <- hand[[i]][-which(cards0$colors[cards0$playerID==paste0("player",i)] %in% discard0$colors)[1],] 
+      assign( "discard_pile",cards0[which(cards0$playerID==paste0("player",i) & cards0$colors==discard_pile$colors)[1],],envir = globalenv() )
+    }
+    else if(any(hand[[i]]$faces=="Wild")){
+      hand[[i]] <- hand[[i]][-which(hand[[i]]$faces=="Wild")[1],] 
+      assign( "discard_pile",hand[[i]][which(hand[[i]]$faces=="Wild")[1],],envir = globalenv() )
+    }
+    else if(any(hand[[i]]$faces=="WildDraw+4")){
+      hand[[i]] <- hand[[i]][-which(hand[[i]]$faces=="WildDraw+4")[1],] 
+      assign( "discard_pile",hand[[i]][which(hand[[i]]$faces=="WildDraw+4")[1],],envir = globalenv() )
+      hand[[i+1]][(nrow(hand[[i+1]])+1):(nrow(hand[[i+1]])+4),] <- draw_pile[1:4,]
+      assign("draw_pile", draw_pile[-(1:4),], envir = globalenv())
+    }
+    else if(any(hand[[i]]$faces =="Skip")){
+      hand[[i]]=hand[[i]][-which(hand[[i]]$faces=="Skip")[1],]
+      assign("discard_pile",hand[[i]][which(hand[[i]]$faces=="Skip")[1],],envir=globalenv())
+    }
+    else {
+      hand[[i]][nrow(hand[[i]])+1,] <- draw_pile[1,]
+      assign("draw_pile", draw_pile[-1,], envir = globalenv())
+    } #end final else
+  } #end for()
+  return(list(hand, get("draw_pile", envir = globalenv()), get("discard_pile", envir = globalenv())))
+} #end function()
+```
+
+```{r}
+play(deal(deck_shuffled,5), draw_pile, discard_pile)
+```
+
+**#10** (Let's Build Some Uno Programs) Beginning with the **Program 4 - Playing 1 Card per Player** in Week 11 Notes, add code necessary to allow a player to play "Draw+2" in order to match the top card of the **discard** pile. **This problem does not depend on Problem 9.**
+
+```{r}
+play <- function(cards0, draw0, discard0){
+  hand <- split(cards0, cards0$playerID)
+  for (i in 1:length(unique(cards0$playerID))){
+    if(any(cards0$faces[cards0$playerID==paste0("player",i)] %in% discard0$faces)){
+      hand[[i]] <- hand[[i]][-which(cards0$faces[cards0$playerID==paste0("player",i)] %in% discard0$faces)[1],] 
+      assign( "discard_pile",cards0[which(cards0$playerID==paste0("player",i) & cards0$faces==discard0$faces)[1],],envir = globalenv() )
+    }
+    else if(any(cards0$colors[cards0$playerID==paste0("player",i)] %in% discard0$colors)){
+      hand[[i]] <- hand[[i]][-which(cards0$colors[cards0$playerID==paste0("player",i)] %in% discard0$colors)[1],] 
+      assign( "discard_pile",cards0[which(cards0$playerID==paste0("player",i) & cards0$colors==discard_pile$colors)[1],],envir = globalenv() )
+    }
+    else if(any(hand[[i]]$faces=="Wild")){
+      hand[[i]] <- hand[[i]][-which(hand[[i]]$faces=="Wild")[1],] 
+      assign( "discard_pile",hand[[i]][which(hand[[i]]$faces=="Wild")[1],],envir = globalenv() )
+    }
+    else if(any(hand[[i]]$faces=="WildDraw+4")){
+      hand[[i]] <- hand[[i]][-which(hand[[i]]$faces=="WildDraw+4")[1],] 
+      assign( "discard_pile",hand[[i]][which(hand[[i]]$faces=="WildDraw+4")[1],],envir = globalenv() )
+      hand[[i+1]][(nrow(hand[[i+1]])+1):(nrow(hand[[i+1]])+4),] <- draw_pile[1:4,]
+      assign("draw_pile", draw_pile[-(1:4),], envir = globalenv())
+    }
+    else if(any(hand[[i]]$faces=="Draw+2")){
+      hand[[i]]=hand[[i]][-which(hand[[i]]$faces=="Draw+2")[1],2]
+      assign("dsicard_pile",hand[[i]][which(hand[[i]]$faces=="Draw+2")[1],],envir=globalenv())
+      hand[[i+1]][(nrow(hand[[i+1]])+1):(nrow(hand[[i+1]])+2),]=draw_pile[1:2,]
+      assign("draw_pile",draw_pile[-(1:2),],envir=globalenv())
+    }
+    else {
+      hand[[i]][nrow(hand[[i]])+1,] <- draw_pile[1,]
+      assign("draw_pile", draw_pile[-1,], envir = globalenv())
+    } #end final else
+  } #end for()
+  return(list(hand, get("draw_pile", envir = globalenv()), get("discard_pile", envir = globalenv())))
+} #end function()
+```
+
+```{r}
+play(deal(deck_shuffled,5), draw_pile, discard_pile)
+```
+

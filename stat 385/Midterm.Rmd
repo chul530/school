@@ -1,0 +1,292 @@
+---
+title: "STAT 385 Statistics Programming Methods - Spring 2021"
+output: html_document
+---
+
+## Midterm Exam 
+### Due: Monday March 15, 2021 11:59 pm US Central Time
+#### Created by Course staff
+
+Grading Rubric (per question):  
+2 points if complete and correct  
+1 point if incomplete or incorrect  
+0 points if no attempt made  
+
+
+**Retrieving your work**
+
+This .Rmd file is written in RMarkdown. The .Rmd file is rendered as an .html file for easier viewing. This is located in the **exams** directory within the **stat385-sp21-course-content** repo, i.e. **stat385-sp21-course-content/exams** in GitHub. It is always recommended that you **pull** (or refresh) the **stat385-sp21-course-content** repo to ensure that you have the most updated version of all course content. After pulling (or refreshing) the **stat385-sp21-course-content** repo, the exam file will be in the exam directory. 
+
+**Submitting your work**
+
+In your individual student repo (named as your netID), you are to submit ***two*** files:
+
+a. Your reproducible document file (.Rmd) which should be saved as midterm-netID.Rmd. For example, my midterm file would be saved as midterm-kinson2.Rmd.
+
+b. Your rendered reproducible document file (.html) which should be saved as midterm-netID.html. For example, my midterm file would be saved as midterm-kinson2.html.
+
+You have an unlimited number of submissions, but only the latest proper submission (commit and push) will be viewed and graded. **Remember the .Rmd file needs to render properly to .html before submitting.** 
+
+
+***
+
+Students are expected to complete all problems.
+
+*The following problems should be completed by you as an individual. If any problem asks you a particular question, be sure to answer it completely (with code, written sentences, or both). Written sentences should not appear in code chunks or code cells. Written sentences should appear in Markdown syntax unless specifically stated otherwise.*
+
+***Do not change anything in this file above the double line.***
+
+***
+***
+
+### Use only R and RMarkdown for this entire assignment. Use the URLs to access the data (if any). No local files allowed. Functions or programming ideas beyond the topics/ideas covered thus far are not allowed. The `subset()` function is never allowed in this course. Only use `set.seed()` when instructed.
+
+### If you have not installed the "tidyverse" package on your computer, then you need to install that package in order to complete the exam successfully. Do not include `install.packages()` as executable code in your submitted exam files. Doing so will result in a grade of 0 on the midterm exam.
+
+**#1** Using Markdown syntax, make a numbered list with your first name in normal text as the first item and your last name in italic text as the second item.
+
+1. Yeonchul
+2. *Choi*
+
+**#2** A user-defined function can execute successfully without default values in the arguments. Determine if the preceding statement is TRUE or FALSE and write your answer in bold and all caps.
+
+**TRUE**
+
+**#3** **Merge conflicts** are the erroneous result of files being changed in the local remote repo without first pulling the repo in GitHub. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+TRUE
+
+**#4** The `sum()` function is a **vectorized** function because it takes a vector as input and returns a single summary value. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+FALSE
+**summary**
+
+**#5** **Coercion** is the idea that when vectors are of different length, the vector with shorter length will have repeated values (cycling from first to last) to attain the same length as the longer vector. If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+FALSE
+**recycling**
+
+**#6** Because lists are **atomic** structures, they allow for elements of different types or different modes.  If the text in bold is the term that makes the statement true, then write TRUE below in all caps. If the text in bold is the term that makes the statement false, then write FALSE below in all caps and write the correct term in bold text in a new line under FALSE.
+
+FALSE
+**recursive**
+
+**#7** Every non-NULL object has a mode and length. Determine if the preceding statement is TRUE or FALSE and write your answer in bold and all caps.
+
+**FALSE**
+
+**#8** Which is coding chunk A or B is more optimal? Explain your answer.
+
+```
+#A
+X <- sample(c(1,5,NA,3.8,25,32))
+sum(X[!is.na(X)])
+
+#B
+X <- sample(c(1,5,NA,3.8,25,32))
+sum(X, na.rm=TRUE)
+```
+
+B is more optimal because A changes its value to TRUE and FALSE first and find subset of X. So we must use X twice in the function and we got differnet answer when we just use code sum([!is.na(X)]). However, in B we can just omit all the na in once and find the value of sum.
+
+**#9** Using the vectors `X` and `Y` with the code `set.seed(385); X <- purrr::rbernoulli(10); Y <- purrr::rbernoulli(10)`, compute the following sample correlation statistic by only using vectorized approaches (but no functions) and the formula(s) as a guide:  
+
+- the sample correlation $r_{X,Y}=q_{X,Y}/ s_X s_Y$ where
+
+  - $q_{X,Y}=\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y})$
+  
+  - $s_X=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})^2}$ 
+  
+  - $s_Y=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(y_i-\bar{y})^2}$
+  
+  - $\bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_i$
+  
+  - $\bar{y}=\frac{1}{N}\sum_{i=1}^{N}y_i$
+
+```{r}
+set.seed(385)
+x= purrr::rbernoulli(10) 
+y= purrr::rbernoulli(10)
+n=10
+x_bar=1/n*(1+0+1+1+0+1+0+1+0+0)
+y_bar=1/n*(0+1+1+0+0+0+1+1+1+0)
+(x-x_bar)^2
+s_x=sqrt(0.25*n/(n-1))
+(y-y_bar)^2
+s_y=sqrt(0.25*n/(n-1))
+(x-x_bar)*(y-y_bar)
+q_x_y=(-0.25-0.25+0.25-0.25+0.25-0.25-0.25+0.25-0.25+0.25)/(n-1)
+r_x_y=q_x_y/(s_x*s_y)
+r_x_y
+```
+
+**#10** Using the vectors `X` and `Y` with the code `set.seed(385); X <- purrr::rbernoulli(10); Y <- purrr::rbernoulli(10)`, compute the following sample correlation statistic by only using operators and summary functions (excluding `mean()`, `var()`, `cov()`, and `cor()`) and the formula(s) as a guide:  
+
+- the sample correlation $r_{X,Y}=q_{X,Y}/ s_X s_Y$ where
+
+  - $q_{X,Y}=\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y})$
+  
+  - $s_X=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})^2}$ 
+  
+  - $s_Y=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(y_i-\bar{y})^2}$
+  
+  - $\bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_i$
+  
+  - $\bar{y}=\frac{1}{N}\sum_{i=1}^{N}y_i$
+
+```{r}
+set.seed(385)
+x= purrr::rbernoulli(10) 
+y= purrr::rbernoulli(10)
+n=10
+x_bar=1/n*sum(x)
+y_bar=1/n*sum(y)
+s_x=sqrt(sum((x-x_bar)^2)/(n-1))
+s_y=sqrt(sum((y-y_bar)^2)/(n-1))
+(x-x_bar)*(y-y_bar)
+q_x_y=sum((x-x_bar)*(y-y_bar))/(n-1)
+r_x_y=q_x_y/(s_x*s_y)
+r_x_y
+```
+ 
+**#11** Using the vectors `X` and `Y` with the code `set.seed(385); X <- purrr::rbernoulli(10); Y <- purrr::rbernoulli(10)`, compute the following sample correlation statistic by only using summary function(s) and the formula(s) as a guide:  
+
+- the sample correlation $r_{X,Y}=q_{X,Y}/ s_X s_Y$ where
+
+  - $q_{X,Y}=\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y})$
+  
+  - $s_X=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\bar{x})^2}$ 
+  
+  - $s_Y=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(y_i-\bar{y})^2}$
+  
+  - $\bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_i$
+  
+  - $\bar{y}=\frac{1}{N}\sum_{i=1}^{N}y_i$
+
+```{r}
+set.seed(385)
+x= purrr::rbernoulli(10) 
+y= purrr::rbernoulli(10)
+n=10
+x_bar=mean(x)
+y_bar=mean(y)
+s_x=sd(x)
+s_y=sd(y)
+q_x_y=cov(x,y)
+r_x_y=cor(x,y)
+r_x_y
+```
+
+**#12** Create a matrix named `matrix01` that contains 100 rows and 5 columns such that each column is a new set of 100 realizations from the random Bernoulli distribution with probability of 0.5. **Hint: See Problem 10, but don't use set.seed() here.** Now, print the last 10 rows of the matrix.
+
+```{r}
+m = purrr::rbernoulli(100)
+a = purrr::rbernoulli(100)
+t = purrr::rbernoulli(100)
+r = purrr::rbernoulli(100)
+i = purrr::rbernoulli(100)
+matrix01 = cbind(m,a,t,r,i)
+matrix01[1:10,]
+```
+
+**#13** Using the `matrix01`, coerce the logical values to numeric such that TRUE equals 0 and FALSE equals 1. Now print the first 10 rows of the matrix. **Do this problem without assigning any new objects.**
+
+```{r}
+matrix01 = 1-matrix01[1:10,]
+matrix01
+```
+
+**#14** Using the `matrix01`, compute the following statistic for each column such that a vector is returned using the formula(s) as a guide:  
+
+- the sample mean $\bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_i$
+
+```{r}
+apply(matrix01, FUN = mean, MARGIN = 2)
+```
+
+**#15** Create a matrix named `matrix02` that contains 100 rows and 5 columns such that each column is a new set of 100 realizations from the random Bernoulli distribution with probability of 0.5. **Hint: See Problem 10, but don't use set.seed() here.** Now, coerce the values in the matrix to be character and print the last 10 rows of the matrix.
+
+```{r}
+m1 = purrr::rbernoulli(100)
+a1 = purrr::rbernoulli(100)
+t1 = purrr::rbernoulli(100)
+r1 = purrr::rbernoulli(100)
+i1 = purrr::rbernoulli(100)
+matrix02 = cbind(m1,a1,t1,r1,i1)
+matrix02=apply(matrix02,FUN = as.character, MARGIN = 2)
+tail(matrix02, 10)
+```
+
+**#16** Using the `matrix02`, coerce the character values to logical such that if the length of the character string is greater than 4 characters, then the value should be returned as TRUE and if the length of the character string equals 4 or less, then the value should be returned as FALSE. Now, print the first 10 rows of the matrix. **Do this problem without assigning any new objects.**
+
+```{r}
+matrix02=!apply(matrix02,FUN = as.logical, MARGIN = 2)[1:10,]
+matrix02
+```
+
+**#17** Compute $(A-B)$ where $A$ is the coerced version of `matrix01` (in **Problem 13**) and $B$ is the coerced version of `matrix02` (in **Problem 16**). Now, name the columns of the resulting matrix as "Col1", "Col2", "Col3", "Col4", and "Col5", coerce the matrix object to a tibble object, name the tibble 'tibble01`, and print it.
+
+```{r}
+library(tibble)
+A=matrix01
+B=matrix02
+tibble01=as_tibble(A-B)
+colnames(tibble01)=c("Col1","Col2","Col3","Col4","Col5")
+tibble01
+```
+
+**#18** Why does R return columns as double type (or numeric mode) in **Problem 17**?
+
+In R character values become the highest and logical values become the lowest priority in coercion. So if we mix two different type of values which one is logical and the other is numeric, vector will be coerced to numeric mode.
+
+**#19** Create a custom user-defined function which sorts the first column in descending order of any matrix, array, data.frame, or tibble, such that the input is (1) an R object (up to 5 columns) and the output is the print out of the sorted object. Now, use `tibble01` (from **Problem 17**) as the input for this new function.
+
+```{r}
+library(dplyr)
+ud_19=function(object){
+  if (is.tibble(object) ==TRUE){
+    object=object[,1]
+    object=arrange(object,desc(object))
+    object
+  }
+  else{
+    object=object[,1]
+    object=sort(object,decreasing=TRUE)
+    as.matrix(object)
+  }
+}
+ud_19(tibble01)
+```
+
+**#20** Create a custom user-defined binary operator which computes the 4 statistics (see formulas below) of any pair of vectors, such that the $L$ means the vector on the left-hand-side of the binary operator and the $R$ means the vector on the right-hand-side of the binary operator. The output is a data.frame containing the 4 statistics and their names in quotes as the matrix column names. Now, use column 2 of `matrix01` as $L$ and column 4 of `matrix01` as $R$ (from **Problem 13**).
+
+1. "Pearson" sample correlation $r_{L,R}=\frac{q_{L,R}}{s_L \cdot s_R}$ where
+
+  - $q_{L,R}=\frac{1}{N-1}\sum_{i=1}^{N}(L_i-\bar{L})(R_i-\bar{R})$
+  
+  - $s_L=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(L_i-\bar{L})^2}$ 
+  
+  - $s_R=\sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(R_i-\bar{R})^2}$
+  
+  - $\bar{L}=\frac{1}{N}\sum_{i=1}^{N}L_i$
+  
+  - $\bar{R}=\frac{1}{N}\sum_{i=1}^{N}R_i$
+
+2. "covariance" $q_{L,R}=\frac{1}{N-1}\sum_{i=1}^{N}(L_i-\bar{L})(R_i-\bar{R})$
+
+3. "concordance" correlation coefficient $r_c=\frac{2 \cdot q_{L,R}}{s^2_L + s^2_R + (\bar{L}-\bar{R})^2}$
+
+4. "absolute_difference" between Pearson and concordance $|r_{L,R}-r_c|$
+
+```{r}
+
+ud_20=function(L,R){
+  con=(2*cov(L,R))/(sd(L)^2+sd(R)^2+(mean(L)-mean(R))^2)
+  ad=abs(cor(L,R)-con)
+  ans=data.frame(cor(L,R),cov(L,R),con,ad)
+  colnames(ans)=c("Pearson","covariance","concordance","absolute_difference")
+  ans
+}
+
+ud_20(matrix01[,2],matrix01[,4])
+```
